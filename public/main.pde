@@ -1,4 +1,5 @@
-/* @pjs preload="me.jpg"; */
+/* @pjs preload="Octocat.png"; */
+
 int w = 500;
 int h = 500;
 int max = w*h;
@@ -11,7 +12,7 @@ PImage loadedImg;
 
 void setup() {
   size(w,h)
-  loadedImg = loadImage("me.jpg");
+  loadedImg = loadImage("Octocat.png");
 
   smooth();
   strokeWeight(1);
