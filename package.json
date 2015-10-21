@@ -1,0 +1,23 @@
+{
+  "name": "sketch-me",
+  "version": "1.0.0",
+  "description": "sketch image",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://rokoala.github.io/sketch-me"
+  },
+  "keywords": [
+    "sketch",
+    "processing.js"
+  ],
+  "author": "RodrigoKoga",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

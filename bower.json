@@ -1,0 +1,25 @@
+{
+  "name": "sketch-me",
+  "version": "0.0.0",
+  "description": "create a sketch of a image",
+  "main": "index.js",
+  "keywords": [
+    "canvas",
+    "processing.js"
+  ],
+  "authors": [
+    "RodrigoKoga"
+  ],
+  "license": "MIT",
+  "homepage": "http://rokoala.github.io",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Processing.js": "~1.4.16"
+  }
+}
