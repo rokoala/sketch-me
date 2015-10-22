@@ -96,7 +96,7 @@ $(document).ready(function () {
           w = loadedImg.width;
           h = loadedImg.height;
           max = w*h;
-          
+
           processing.size(w,h)
           processing.image(loadedImg,0,0,w,h);
           processing.loadPixels();
@@ -116,7 +116,7 @@ $(document).ready(function () {
 
         if(checkValid(x1,dx1,dy1)){
 
-          processing.stroke(pixels[x1],processing.random(100.0)+20);
+          processing.stroke(pixels[x1]);
 
           if(iteration <= 5000){
               processing.fill(255,0);
