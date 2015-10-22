@@ -31,6 +31,7 @@ $(document).ready(function () {
   			var reader = new FileReader();
   			// Note: addEventListener doesn't work in Google Chrome for this event
   			reader.onload = function (evt) {
+          debugger;
   				userImg.src = evt.target.result;
   			};
   			reader.readAsDataURL(file);
@@ -78,9 +79,8 @@ $(document).ready(function () {
     }
 
     processing.setup = function () {
-      processing.size(w,h)
-      loadedImg = processing.loadImage(userImg.src);
 
+      loadedImg = processing.loadImage(userImg.src);
       processing.smooth();
       processing.background(255);
       processing.strokeWeight(1);
@@ -93,9 +93,13 @@ $(document).ready(function () {
       // start drawing
       function start() {
         if(iteration === 0){
+          w = loadedImg.width;
+          h = loadedImg.height;
+          max = w*h;
+          
+          processing.size(w,h)
           processing.image(loadedImg,0,0,w,h);
           processing.loadPixels();
-
           pixels = processing.pixels.toArray();
           processing.background(255);
         }
