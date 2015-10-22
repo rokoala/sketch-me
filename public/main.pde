@@ -1,4 +1,4 @@
-/* @pjs preload="Octocat.png"; */
+/* @pjs preload="img/Octocat.png"; */
 
 int w = 500;
 int h = 500;
@@ -12,7 +12,7 @@ PImage loadedImg;
 
 void setup() {
   size(w,h)
-  loadedImg = loadImage("Octocat.png");
+  loadedImg = loadImage("img/Octocat.png");
 
   smooth();
   strokeWeight(1);
