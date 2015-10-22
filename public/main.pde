@@ -46,7 +46,7 @@ int getY(value){
 
 boolean checkValid(v1,v2,v3){
   if( pixels[v1] < -1 && pixels[v2] < -1 && pixels[v3] < -1){
-    stroke(pixels[v1]);
+    stroke(pixels[v1],random(100.0)+20);
     return true;
   }else{
     return false;
@@ -64,9 +64,6 @@ void draw(){
 
   dx1 = getRandomX();
   dy1 = getRandomY();
-
-
-  stroke(0, 0, 0);
 
   if(checkValid(x1,dx1,dy1)){
     if(iteration <= 5000){
