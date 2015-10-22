@@ -4,6 +4,7 @@
 $(document).ready(function () {
 
   var $canvas = $("#sketchCanvas");
+  var $saveBtn = $("<button/>").addClass("save-image-btn").text("Capture Image State");
   var canvasElement = $canvas.get(0);
   var middleY = canvasElement.height / 2;
   var ctx=canvasElement.getContext("2d");
@@ -129,6 +130,7 @@ $(document).ready(function () {
         iteration++;
         if(iteration > 50000)
           processing.noLoop();
+
       };
 
       // waits until image have been loaded
@@ -138,10 +140,18 @@ $(document).ready(function () {
       }
 
     };
+
+    $saveBtn.click(function () {
+      processing.noLoop();
+      processing.save("sketchImg");
+      processing.loop();
+    });
+
   }
 
   userImg.onload = function() {
     var p = new Processing(canvasElement, sketchProc);
+    $("body").append($saveBtn);
   }
 
 });
