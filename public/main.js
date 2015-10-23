@@ -31,7 +31,6 @@ $(document).ready(function () {
   			var reader = new FileReader();
   			// Note: addEventListener doesn't work in Google Chrome for this event
   			reader.onload = function (evt) {
-          debugger;
   				userImg.src = evt.target.result;
   			};
   			reader.readAsDataURL(file);
@@ -157,6 +156,16 @@ $(document).ready(function () {
     var p = new Processing(canvasElement, sketchProc);
     $("body").append($saveBtn);
   }
+
+  $("#getRandomImage").click(function (event) {
+    $.ajax({
+      url:"/getRandomImage"
+    }).then(function (result) {
+      var imageBase64 = "data:image/png;base64,"+result;
+      userImg.src = imageBase64;
+    });
+    $("#getRandomImage").remove();
+  });
 
 });
 

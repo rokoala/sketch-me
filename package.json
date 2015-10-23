@@ -19,6 +19,8 @@
   "author": "RodrigoKoga",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "node-uuid": "^1.4.3",
+    "request": "^2.65.0"
   }
 }
