@@ -2,7 +2,7 @@ var express = require('express')
 ,   path = require('path')
 ,   fs = require('fs')
 ,   uuid = require('node-uuid')
-,   request = require('request').defaults({proxy:'http://10.31.220.23:8080', agent:false})
+,   request = require('request')
 ;
 
 var app = express();
