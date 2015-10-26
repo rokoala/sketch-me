@@ -1,10 +1,85 @@
+/*
+Project: sketchMe v1.0.0 - sketch effects for canvas element
+Authors: Rodrigo Koga
+License: MIT
+Github: https://github.com/rokoala/sketch-me.git
+ */
+
+(function(window,undefined){
+
+  SketchMe = function (selector,options) {
+
+    function isCanvasSupported(elem){
+      return !!(elem.getContext && elem.getContext('2d'));
+    }
+
+    if ( !selector ) {
+      return this;
+    }else {
+      var element = document.getElementById(selector);
+      if(element){
+        var canvas = document.createElement("canvas");
+        element.appendChild(canvas);
+        return new SketchMe.prototype.init(canvas,options);
+      }else if(isCanvasSupported(selector)){
+        return new SketchMe.prototype.init(selector,options);
+      }else{
+        throw "Initialize SketcheMe with an id or a canvas element!";
+      }
+    }
+  };
+
+  SketchMe.prototype = {
+    init:function (canvas,options) {
+      this.canvas = canvas;
+      this.options = options;
+      this.ctx = canvas.getContext("2d");
+    }
+  }
+
+  window.SketchMe = SketchMe;
+
+})(window);
+
+
 (function ($) {
 'use strict';
 
 $(document).ready(function () {
 
+  var sketchConfig = {
+    randomMin: -50,
+    randomMax: 50,
+    save:function() {
+      _processing.noLoop();
+      _processing.save("sketchImg");
+      _processing.loop();
+    },
+    stop:function () {
+      _processing.noLoop();
+    },
+    start:function () {
+      _processing.loop();
+    },
+    loadRandomImage:function () {
+      $.ajax({
+        url:"/getRandomImage"
+      }).then(function (result) {
+        var imageBase64 = "data:image/png;base64,"+result;
+        userImg.src = imageBase64;
+      });
+    }
+  };
+  var gui = new dat.GUI();
+
+  gui.add(sketchConfig, 'randomMin',-50,0);
+  gui.add(sketchConfig, 'randomMax',0,50);
+  gui.add(sketchConfig, 'save');
+  gui.add(sketchConfig, 'stop')
+  gui.add(sketchConfig, 'start')
+  gui.add(sketchConfig, 'loadRandomImage');
+
   var $canvas = $("#sketchCanvas");
-  var $saveBtn = $("<button/>").addClass("save-image-btn").text("Capture Image State");
   var canvasElement = $canvas.get(0);
   var middleY = canvasElement.height / 2;
   var ctx=canvasElement.getContext("2d");
@@ -47,6 +122,7 @@ $(document).ready(function () {
   var index = 0;
   var iteration = 0;
   var pixels = [];
+  var _processing = null;
 
   var getRandomX = function(){
     var des = Math.random(-15,15);
@@ -68,6 +144,8 @@ $(document).ready(function () {
 
   // Simple way to attach js code to the canvas is by using a function
   function sketchProc(processing) {
+
+    _processing = processing;
 
     var checkValid = function(v1,v2,v3){
       if(pixels[v1] < -1 && pixels[v2] < -1 && pixels[v3] < -1){
@@ -119,7 +197,7 @@ $(document).ready(function () {
 
           if(iteration <= 5000){
               processing.fill(255,0);
-              processing.bezier(getX(x1) + processing.random(-50,50), currentY, currentX, currentY, getX(dx1)+processing.random(-50,50), getY(dy1)+processing.random(-50,50),currentX+processing.random(-50,50), currentY);
+              processing.bezier(getX(x1) + processing.random(sketchConfig.randomMin,sketchConfig.randomMax), currentY, currentX, currentY, getX(dx1)+processing.random(sketchConfig.randomMin,sketchConfig.randomMax), getY(dy1)+processing.random(sketchConfig.randomMin,sketchConfig.randomMax),currentX+processing.random(sketchConfig.randomMin,sketchConfig.randomMax), currentY);
           }else if(iteration > 5000){
               processing.bezier(getX(x1) + processing.random(-15,15), currentY, currentX, currentY, getX(dx1)+processing.random(-20,20), getY(dy1)+processing.random(-20,20),currentX+processing.random(-15,15), currentY);
           }else if(iteration > 7500){
@@ -143,29 +221,11 @@ $(document).ready(function () {
       }
 
     };
-
-    $saveBtn.click(function () {
-      processing.noLoop();
-      processing.save("sketchImg");
-      processing.loop();
-    });
-
   }
 
   userImg.onload = function() {
     var p = new Processing(canvasElement, sketchProc);
-    $("body").append($saveBtn);
   }
-
-  $("#getRandomImage").click(function (event) {
-    $.ajax({
-      url:"/getRandomImage"
-    }).then(function (result) {
-      var imageBase64 = "data:image/png;base64,"+result;
-      userImg.src = imageBase64;
-    });
-    $("#getRandomImage").remove();
-  });
 
 });
 
