@@ -48,8 +48,9 @@ Github: https://github.com/rokoala/sketch-me.git
 $(document).ready(function () {
 
   var sketchConfig = {
-    randomMin: -50,
-    randomMax: 50,
+    bezierRandom: 25,
+    randomX:15,
+    randomY:15,
     save:function() {
       _processing.noLoop();
       _processing.save("sketchImg");
@@ -72,8 +73,9 @@ $(document).ready(function () {
   };
   var gui = new dat.GUI();
 
-  gui.add(sketchConfig, 'randomMin',-50,0);
-  gui.add(sketchConfig, 'randomMax',0,50);
+  gui.add(sketchConfig, 'bezierRandom',0,50);
+  gui.add(sketchConfig, 'randomX',0,40);
+  gui.add(sketchConfig, 'randomY',0,40);
   gui.add(sketchConfig, 'save');
   gui.add(sketchConfig, 'stop')
   gui.add(sketchConfig, 'start')
@@ -98,6 +100,7 @@ $(document).ready(function () {
 
   // Handle dropped image file - only Firefox and Google Chrome
   canvasElement.addEventListener("drop", function (evt) {
+
   	var files = evt.dataTransfer.files;
 
     if (files.length > 0) {
@@ -115,22 +118,18 @@ $(document).ready(function () {
   }, false);
 
 
-  var loadedImg = null;
-  var w = 500;
-  var h = 500;
-  var max = w*h;
-  var index = 0;
-  var iteration = 0;
+  var loadedImg,_processing = null;
+  var w,h,max;
+  var index,iteration = 0;
   var pixels = [];
-  var _processing = null;
 
   var getRandomX = function(){
-    var des = Math.random(-15,15);
+    var des = Math.random(-sketchConfig.randomX,sketchConfig.randomX);
     return Math.ceil(index + des);
   }
 
   var getRandomY = function(){
-    var des = (Math.random(-15,15) * w);
+    var des = (Math.random(-sketchConfig.randomY,sketchConfig.randomY) * w);
     return Math.ceil(index + des);
   }
 
@@ -156,7 +155,6 @@ $(document).ready(function () {
     }
 
     processing.setup = function () {
-
       loadedImg = processing.loadImage(userImg.src);
       processing.smooth();
       processing.background(255);
@@ -192,20 +190,9 @@ $(document).ready(function () {
         var dy1 = getRandomY();
 
         if(checkValid(x1,dx1,dy1)){
-
           processing.stroke(pixels[x1]);
-
-          if(iteration <= 5000){
-              processing.fill(255,0);
-              processing.bezier(getX(x1) + processing.random(sketchConfig.randomMin,sketchConfig.randomMax), currentY, currentX, currentY, getX(dx1)+processing.random(sketchConfig.randomMin,sketchConfig.randomMax), getY(dy1)+processing.random(sketchConfig.randomMin,sketchConfig.randomMax),currentX+processing.random(sketchConfig.randomMin,sketchConfig.randomMax), currentY);
-          }else if(iteration > 5000){
-              processing.bezier(getX(x1) + processing.random(-15,15), currentY, currentX, currentY, getX(dx1)+processing.random(-20,20), getY(dy1)+processing.random(-20,20),currentX+processing.random(-15,15), currentY);
-          }else if(iteration > 7500){
-              processing.bezier(getX(x1) + processing.random(-10,10), currentY, currentX, currentY, getX(dx1)+processing.random(-10,10), getY(dy1)+processing.random(-5,5),currentX+processing.random(-5,5), currentY);
-          }else if(iteration > 10000){
-              processing.fill(pixels[x1]);
-              processing.bezier(getX(x1) + processing.random(-3,3), currentY, currentX, currentY, getX(dx1)+processing.random(-3,3), getY(dy1)+processing.random(-3,3),currentX+processing.random(-3,3), currentY);
-          }
+          processing.fill(255,0);
+          processing.bezier(getX(x1) + processing.random(-sketchConfig.bezierRandom,sketchConfig.bezierRandom), currentY, currentX, currentY, getX(dx1)+processing.random(-sketchConfig.bezierRandom,sketchConfig.bezierRandom), getY(dy1)+processing.random(-sketchConfig.bezierRandom,sketchConfig.bezierRandom),currentX+processing.random(-sketchConfig.bezierRandom,sketchConfig.bezierRandom), currentY);
         }
 
         iteration++;
@@ -224,6 +211,7 @@ $(document).ready(function () {
   }
 
   userImg.onload = function() {
+    loadedImg = null;
     var p = new Processing(canvasElement, sketchProc);
   }
 
